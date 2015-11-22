@@ -71,6 +71,7 @@
             this.filterBox.Name = "filterBox";
             this.filterBox.Size = new System.Drawing.Size(243, 20);
             this.filterBox.TabIndex = 4;
+            this.filterBox.Text = "tcp && dst port 27000";
             // 
             // gui_btn_stop
             // 

@@ -73,21 +73,21 @@ namespace Sentinel {
              * packet.Ethernet.EtherType - ipv6, ipv4, arp
              * packet.Ethernet.IpV4.Protocol - HopByhopOption
              */
-            var packet = e.packet;
-            packet_number++;
-            packets.Add(packet_number, packet);
             //var protocol = packet.Ethernet.IpV4.Protocol == PcapDotNet.Packets.IpV4.IpV4Protocol.Tcp ? "TCP" : "UDP";
+            var packet = e.packet;
             var protocol = "";
             var source = "";
-            var payload = packet.IpV4.Payload.ToString();
+            Datagram payload;
             switch (packet.Ethernet.IpV4.Protocol) {
                 case PcapDotNet.Packets.IpV4.IpV4Protocol.Tcp:
                     protocol = "TCP";
                     source = String.Format("{0}:{1}", packet.Ethernet.IpV4.Source, packet.Ethernet.IpV4.Tcp.SourcePort);
+                    payload = packet.Ethernet.IpV4.Tcp.Payload;
                     break;
                 case PcapDotNet.Packets.IpV4.IpV4Protocol.Udp:
                     protocol = "UDP";
                     source = String.Format("{0}:{1}", packet.Ethernet.IpV4.Source, packet.Ethernet.IpV4.Udp.SourcePort);
+                    payload = packet.Ethernet.IpV4.Udp.Payload;
                     break;
                 default:
                     // Ignore anything thats not UDP or TCP? @TODO: Add this to Settings
@@ -97,7 +97,12 @@ namespace Sentinel {
                     break;
             }
 
+            //Skip packets with zero data payload @TODO: Config this
+            if (payload.Length == 0) return;
 
+           
+            packet_number++;
+            packets.Add(packet_number, packet);
             ListViewItem item = new ListViewItem();
             item.Text = packet_number.ToString();
             //Date
@@ -108,10 +113,10 @@ namespace Sentinel {
             item.SubItems.Add(packet.Ethernet.IpV4.Destination.ToString());
             //Protocol
             item.SubItems.Add(protocol);
-            //Size
-            item.SubItems.Add(packet.Length.ToString());
+            //Size ( of payload data )
+            item.SubItems.Add(payload.Length.ToString());
             //Payload
-            item.SubItems.Add(payload);
+            item.SubItems.Add(payload.ToString());
 
             this.Invoke((MethodInvoker)delegate {
                 packetListView.Items.Add(item); // runs on UI thread
@@ -130,15 +135,19 @@ namespace Sentinel {
                 //MessageBox.Show(selectedPacket.SubItems[0].Text);
                 var no = Int32.Parse(selectedPacket.SubItems[0].Text); // packet #
                 var packet = packets[no];
-                var hexString = packet.Ethernet.Payload.ToHexadecimalString();
+                var hexString = "";
+   
+                if (packet.Ethernet.IpV4.Protocol == PcapDotNet.Packets.IpV4.IpV4Protocol.Tcp) {
+                    hexString = packet.Ethernet.IpV4.Tcp.Payload.ToHexadecimalString();
+                }
+                else if (packet.Ethernet.IpV4.Protocol == PcapDotNet.Packets.IpV4.IpV4Protocol.Udp) {
+                    hexString = packet.Ethernet.IpV4.Udp.Payload.ToHexadecimalString();
+                }
+                else {
+                    // only UDP and Tcp are supported atm.
+                    return;
+                }
 
-                //String ascii = String.Empty;
-
-              
-               // ascii += '\0';
-                //Console.WriteLine("Ascii: " + ascii);
-                //asciiDetails.Rtf = @"{\rtf1\utf-8" + ascii + "}";
-                //var ascii = StringUtil.ConvertHexToString(hexString, Encoding.ASCII);
                 var ascii = hexToStr(hexString);
                 //hexDetails.Text = Regex.Replace(hexString, ".{2}", "$0 ");
                 hexDetails.Text = hexString;
