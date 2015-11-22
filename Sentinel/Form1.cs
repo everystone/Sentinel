@@ -78,16 +78,19 @@ namespace Sentinel {
             var packet = e.packet;
             var protocol = "";
             var source = "";
+            var destination = "";
             Datagram payload;
             switch (packet.Ethernet.IpV4.Protocol) {
                 case PcapDotNet.Packets.IpV4.IpV4Protocol.Tcp:
                     protocol = "TCP";
                     source = String.Format("{0}:{1}", packet.Ethernet.IpV4.Source, packet.Ethernet.IpV4.Tcp.SourcePort);
+                    destination = String.Format("{0}:{1}", packet.Ethernet.IpV4.Destination, packet.Ethernet.IpV4.Tcp.DestinationPort);
                     payload = packet.Ethernet.IpV4.Tcp.Payload;
                     break;
                 case PcapDotNet.Packets.IpV4.IpV4Protocol.Udp:
                     protocol = "UDP";
                     source = String.Format("{0}:{1}", packet.Ethernet.IpV4.Source, packet.Ethernet.IpV4.Udp.SourcePort);
+                    destination = String.Format("{0}:{1}", packet.Ethernet.IpV4.Destination, packet.Ethernet.IpV4.Udp.DestinationPort);
                     payload = packet.Ethernet.IpV4.Udp.Payload;
                     break;
                 default:
@@ -112,7 +115,7 @@ namespace Sentinel {
             //Source
             item.SubItems.Add(source);
             //Destination
-            item.SubItems.Add(packet.Ethernet.IpV4.Destination.ToString());
+            item.SubItems.Add(destination);
             //Protocol
             item.SubItems.Add(protocol);
             //Size ( of payload data )
