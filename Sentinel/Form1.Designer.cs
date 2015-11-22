@@ -23,6 +23,7 @@
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent() {
+            this.components = new System.ComponentModel.Container();
             this.panel1 = new System.Windows.Forms.Panel();
             this.gui_packetNumberBox = new System.Windows.Forms.TextBox();
             this.filterBox = new System.Windows.Forms.TextBox();
@@ -31,6 +32,10 @@
             this.gui_ComboAdapter = new System.Windows.Forms.ComboBox();
             this.hexDetails = new System.Windows.Forms.RichTextBox();
             this.asciiDetails = new System.Windows.Forms.RichTextBox();
+            this.gui_label_calc = new System.Windows.Forms.Label();
+            this.hexContextStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.decodeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.gui_bytes_selected = new System.Windows.Forms.Label();
             this.packetListView = new ListViewNF();
             this.noHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.dateHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -40,6 +45,7 @@
             this.sizeHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.payloadHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.panel1.SuspendLayout();
+            this.hexContextStrip.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel1
@@ -105,6 +111,8 @@
             // hexDetails
             // 
             this.hexDetails.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.hexDetails.ContextMenuStrip = this.hexContextStrip;
+            this.hexDetails.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.hexDetails.HideSelection = false;
             this.hexDetails.Location = new System.Drawing.Point(0, 341);
             this.hexDetails.Name = "hexDetails";
@@ -119,6 +127,7 @@
             // 
             this.asciiDetails.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.asciiDetails.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.asciiDetails.HideSelection = false;
             this.asciiDetails.Location = new System.Drawing.Point(446, 341);
             this.asciiDetails.Name = "asciiDetails";
@@ -126,6 +135,40 @@
             this.asciiDetails.Size = new System.Drawing.Size(439, 159);
             this.asciiDetails.TabIndex = 4;
             this.asciiDetails.Text = "";
+            // 
+            // gui_label_calc
+            // 
+            this.gui_label_calc.AutoSize = true;
+            this.gui_label_calc.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.gui_label_calc.Location = new System.Drawing.Point(152, 324);
+            this.gui_label_calc.Name = "gui_label_calc";
+            this.gui_label_calc.Size = new System.Drawing.Size(149, 17);
+            this.gui_label_calc.TabIndex = 5;
+            this.gui_label_calc.Text = "Select text in hexview..";
+            // 
+            // hexContextStrip
+            // 
+            this.hexContextStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.decodeToolStripMenuItem});
+            this.hexContextStrip.Name = "hexContextStrip";
+            this.hexContextStrip.Size = new System.Drawing.Size(115, 26);
+            // 
+            // decodeToolStripMenuItem
+            // 
+            this.decodeToolStripMenuItem.Name = "decodeToolStripMenuItem";
+            this.decodeToolStripMenuItem.Size = new System.Drawing.Size(114, 22);
+            this.decodeToolStripMenuItem.Text = "Decode";
+            this.decodeToolStripMenuItem.Click += new System.EventHandler(this.decodeToolStripMenuItem_Click);
+            // 
+            // gui_bytes_selected
+            // 
+            this.gui_bytes_selected.AutoSize = true;
+            this.gui_bytes_selected.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.gui_bytes_selected.Location = new System.Drawing.Point(12, 324);
+            this.gui_bytes_selected.Name = "gui_bytes_selected";
+            this.gui_bytes_selected.Size = new System.Drawing.Size(111, 17);
+            this.gui_bytes_selected.TabIndex = 7;
+            this.gui_bytes_selected.Text = "0 bytes selected";
             // 
             // packetListView
             // 
@@ -144,7 +187,7 @@
             this.packetListView.Location = new System.Drawing.Point(0, 36);
             this.packetListView.MultiSelect = false;
             this.packetListView.Name = "packetListView";
-            this.packetListView.Size = new System.Drawing.Size(882, 299);
+            this.packetListView.Size = new System.Drawing.Size(882, 287);
             this.packetListView.TabIndex = 2;
             this.packetListView.UseCompatibleStateImageBehavior = false;
             this.packetListView.View = System.Windows.Forms.View.Details;
@@ -187,6 +230,8 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(885, 500);
+            this.Controls.Add(this.gui_bytes_selected);
+            this.Controls.Add(this.gui_label_calc);
             this.Controls.Add(this.asciiDetails);
             this.Controls.Add(this.packetListView);
             this.Controls.Add(this.hexDetails);
@@ -196,7 +241,9 @@
             this.Load += new System.EventHandler(this.Sentinel_Load);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
+            this.hexContextStrip.ResumeLayout(false);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -218,6 +265,10 @@
         private System.Windows.Forms.TextBox gui_packetNumberBox;
         private System.Windows.Forms.RichTextBox hexDetails;
         private System.Windows.Forms.RichTextBox asciiDetails;
+        private System.Windows.Forms.Label gui_label_calc;
+        private System.Windows.Forms.ContextMenuStrip hexContextStrip;
+        private System.Windows.Forms.ToolStripMenuItem decodeToolStripMenuItem;
+        private System.Windows.Forms.Label gui_bytes_selected;
 
     }
 }

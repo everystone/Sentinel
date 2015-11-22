@@ -38,7 +38,8 @@ namespace Sentinel {
             }
 
             //debuging @TODO: Save this number, auto-select adapter next time program runs.
-            gui_ComboAdapter.SelectedIndex = 3;
+            gui_ComboAdapter.SelectedIndex = 2;
+            filterBox.Text = "tcp && dst port 5005";
         }
 
         void worker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e) {
@@ -90,7 +91,7 @@ namespace Sentinel {
                     payload = packet.Ethernet.IpV4.Udp.Payload;
                     break;
                 default:
-                    // Ignore anything thats not UDP or TCP? @TODO: Add this to Settings
+                    // Ignore anything thats not UDP or TCP @TODO: Add this to Settings
                     return;
                     protocol = packet.Ethernet.IpV4.Protocol.ToString();
                     source = packet.Ethernet.IpV4.Source.ToString();
@@ -98,6 +99,7 @@ namespace Sentinel {
             }
 
             //Skip packets with zero data payload @TODO: Config this
+            // Skip TCP SYN, ACK etc. spam
             if (payload.Length == 0) return;
 
            
@@ -149,11 +151,15 @@ namespace Sentinel {
                 }
 
                 var ascii = hexToStr(hexString);
-                //hexDetails.Text = Regex.Replace(hexString, ".{2}", "$0 ");
-                hexDetails.Text = hexString;
                 ascii = StringUtil.RemoveSpecialCharacters(ascii);
-                asciiDetails.Text = ascii;
-                Console.WriteLine(ascii);
+                
+
+                
+               // asciiDetails.Text = ascii;
+                //hexDetails.Text = hexString;
+                asciiDetails.Text = Regex.Replace(ascii, ".{2}", "$0 ");
+                hexDetails.Text = Regex.Replace(hexString, ".{2}", "$0 ");
+               // Console.WriteLine(ascii);
                 
             }
 
@@ -189,11 +195,55 @@ namespace Sentinel {
             if (hexDetails.SelectedText.Length > 0) {
                 //Console.WriteLine(hexDetails.SelectedText);
                 // Find index of selected text
+                gui_bytes_selected.Text = (Regex.Replace(hexDetails.SelectedText, @"\s+", "").Length / 2).ToString() + " Bytes selected";
+
                 var start = hexDetails.Text.IndexOf(hexDetails.SelectedText);
                 asciiDetails.Select(start / 2, hexDetails.SelectedText.Length / 2);
                 Console.WriteLine(String.Format("Selecting from {0} -> {1}", start/2, hexDetails.SelectedText.Length/2));
             }
             //MessageBox.Show(hexDetails.SelectedText);
+        }
+
+        private void decodeToolStripMenuItem_Click(object sender, EventArgs e) {
+            // Grab Hex selection and remove all spaces
+            var hex = Regex.Replace(hexDetails.SelectedText, @"\s+", "");
+            var byteCount = hex.Length / 2;
+            byte[] bytes = StringUtil.StringToByteArray(hex);
+            Console.WriteLine("Bytes: " + bytes);
+            var result = "";
+            try {
+                switch (byteCount) {
+                    case 0:
+                    case 1:
+                        var boolean = BitConverter.ToBoolean(bytes, 0);
+                        result = String.Format("Bool: {0}", boolean);
+                        break;
+                    case 2: // in16, uint16
+                        var int16 = BitConverter.ToInt16(bytes, 0);
+                        var uint16 = BitConverter.ToUInt16(bytes, 0);
+                        result = String.Format("int16: {0}, UInt316 {1}", int16, uint16);
+                        break;
+                    case 4: // uint32, int32
+
+                        var int32 = BitConverter.ToInt32(bytes, 0);
+                        var uint32 = BitConverter.ToUInt32(bytes, 0);
+                        var f = BitConverter.ToSingle(bytes, 0);
+                        result = String.Format("Int32: {0}, UInt32: {1}, Float: {2}", int32, uint32, f);
+                        break;
+                    case 6:
+                        
+                        break;
+                    case 8:
+                        
+                        var d = BitConverter.ToDouble(bytes, 0);
+                        result = String.Format("Double: {0}", d);
+                        break;
+                }
+            }catch(Exception ex){
+                // Exception when converting from bytes..
+            }
+
+            gui_label_calc.Text = result;
         }
     }
 }
