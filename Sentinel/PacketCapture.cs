@@ -10,20 +10,27 @@ using PcapDotNet.Packets;
 namespace Sentinel {
     class PacketCapture {
 
+        public event EventHandler<PacketArgs> packetEvent;
         private LivePacketDevice adapter;
-        public PacketCapture(LivePacketDevice adapter) {
-            this.adapter = adapter;
-            Open();
+        public PacketCapture() {
+
         }
 
-        private void Open() {
+        public void Listen(LivePacketDevice adapter) {
+            this.adapter = adapter;
             using (PacketCommunicator communicator = adapter.Open(65536, PacketDeviceOpenAttributes.Promiscuous, 1000)) {
                 communicator.ReceivePackets(0, PacketHandler);
             }
         }
 
-        private static void PacketHandler(Packet packet) {
-            Console.WriteLine(packet.Timestamp.ToString("yyyy-MM-dd hh:mm:ss.fff") + " length:" + packet.Length);
+        private void PacketHandler(Packet packet) {
+            // If someone is subscribed to our packetEvent, raise it.
+            Console.WriteLine("packet received..");
+            EventHandler<PacketArgs> handler = packetEvent;
+            if (handler != null) {
+                handler(null, new PacketArgs(packet));
+            }
+           // Console.WriteLine(packet.Timestamp.ToString("yyyy-MM-dd hh:mm:ss.fff") + " length:" + packet.Length);
         }
     }
 }
