@@ -16,10 +16,10 @@ namespace Sentinel {
 
         }
 
-        public void Listen(LivePacketDevice adapter) {
+        public void Listen(LivePacketDevice adapter, int count) {
             this.adapter = adapter;
             using (PacketCommunicator communicator = adapter.Open(65536, PacketDeviceOpenAttributes.Promiscuous, 1000)) {
-                communicator.ReceivePackets(0, PacketHandler);
+                communicator.ReceivePackets(count, PacketHandler);
             }
         }
 

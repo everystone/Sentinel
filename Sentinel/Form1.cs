@@ -1,4 +1,5 @@
 ﻿using PcapDotNet.Core;
+using PcapDotNet.Packets;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -11,12 +12,13 @@ using System.Windows.Forms;
 
 
 namespace Sentinel {
-    public partial class Form1 : Form {
+    public partial class Sentinel : Form {
         DeviceList deviceList;
         PacketCapture packetCapture;
         private BackgroundWorker worker;
+        private int packet_number = 0;
 
-        public Form1() {
+        public Sentinel() {
             InitializeComponent();
 
             deviceList = new DeviceList();
@@ -34,12 +36,13 @@ namespace Sentinel {
 
         void worker_DoWork(object sender, DoWorkEventArgs e) {
             // Receive packets in a backgroundworker to prevent blocking of GUI thread.
-            packetCapture.Listen((LivePacketDevice)e.Argument);
+            packetCapture.Listen((LivePacketDevice)e.Argument, 5);
         }
 
 
 
         private void gui_btn_start_Click(object sender, EventArgs e) {
+            packet_number = 0;
             var selected = gui_ComboAdapter.SelectedItem.ToString();
             var adapter = deviceList.deviceFromDescription(selected);
             Console.WriteLine(String.Format("Starting capture on {0}", adapter.Description));
@@ -47,7 +50,37 @@ namespace Sentinel {
         }
 
         void packetCapture_packetEvent(object sender, PacketArgs e) {
+            /* probably needs to be invoked.
+            if (InvokeRequired) {
+                Invoke(new Action<object, PacketArgs>(packetCapture_packetEvent), sender, e);
+            }*/
+
+            var packet = e.packet;
+            packet_number++;
+            ListViewItem item = new ListViewItem();
+            item.Text = packet_number.ToString();
+            //Date
+            item.SubItems.Add(packet.Timestamp.ToString("yyyy-MM-dd hh:mm:ss.fff"));
+            //From
+            item.SubItems.Add(packet.Ethernet.IpV4.Source.ToString());
+            //To
+            item.SubItems.Add(packet.Ethernet.IpV4.Destination.ToString());
+            //Protocol
+            item.SubItems.Add(packet.Ethernet.IpV4.Protocol.ToString());
+            //Size
+            item.SubItems.Add(packet.Length.ToString());
+            //Data
+            item.SubItems.Add(packet.IpV4.Payload.ToHexadecimalString());
+
+            this.Invoke((MethodInvoker)delegate {
+                packetListView.Items.Add(item); // runs on UI thread
+            });
+            
             Console.WriteLine(e.packet.Timestamp.ToString("yyyy-MM-dd hh:mm:ss.fff") + " length:" + e.packet.Length);
+        }
+
+        private void gui_btn_stop_Click(object sender, EventArgs e) {
+
         }
     }
 }
