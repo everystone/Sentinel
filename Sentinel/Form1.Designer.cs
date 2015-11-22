@@ -208,6 +208,7 @@
             this.packetListView.TabIndex = 8;
             this.packetListView.UseCompatibleStateImageBehavior = false;
             this.packetListView.View = System.Windows.Forms.View.Details;
+            this.packetListView.SelectedIndexChanged += new System.EventHandler(this.packetListView_SelectedIndexChanged);
             // 
             // noHeader
             // 

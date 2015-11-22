@@ -56,8 +56,8 @@ namespace Sentinel {
 
 
         private void gui_btn_start_Click(object sender, EventArgs e) {
-            packet_number = 0;
-            packets.Clear();
+            //packet_number = 0;
+            //packets.Clear();
             var selected = gui_ComboAdapter.SelectedItem.ToString();
             var adapter = deviceList.deviceFromDescription(selected);
             var filter = filterBox.Text;

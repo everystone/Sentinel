@@ -1,0 +1,9 @@
+﻿Bugs:
+	all packets with zero data is dropped, but they are still counted as part of the inital number of packets to intercept
+
+Todo:
+Settings: 
+	- Remember last used network adapter
+	- Filters
+	- Discard all but tcp,udp
+	- Discard packets with zero data (syn, ack, etc)
