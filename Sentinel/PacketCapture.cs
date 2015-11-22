@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using PcapDotNet.Core;
 using PcapDotNet.Packets;
+using System.Windows.Forms;
 
 
 namespace Sentinel {
@@ -15,10 +16,16 @@ namespace Sentinel {
         public PacketCapture() {
 
         }
-
-        public void Listen(LivePacketDevice adapter, int count) {
+        // Filter syntax: https://www.winpcap.org/docs/docs_40_2/html/group__language.html
+        public void Listen(LivePacketDevice adapter, String filter, int count) {
             this.adapter = adapter;
             using (PacketCommunicator communicator = adapter.Open(65536, PacketDeviceOpenAttributes.Promiscuous, 1000)) {
+                try {
+                    communicator.SetFilter(filter); }
+                catch (Exception e) {
+                    MessageBox.Show(null, e.Message, "Filter Exception", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
                 communicator.ReceivePackets(count, PacketHandler);
             }
         }

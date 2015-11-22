@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Sentinel {
+
     public class ListViewNF : System.Windows.Forms.ListView {
         public ListViewNF() {
             //Activate double buffering
@@ -23,4 +23,4 @@ namespace Sentinel {
             }
         }
     }
-}
+
