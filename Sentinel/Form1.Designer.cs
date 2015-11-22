@@ -104,17 +104,21 @@
             // hexDetails
             // 
             this.hexDetails.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.hexDetails.HideSelection = false;
             this.hexDetails.Location = new System.Drawing.Point(0, 341);
             this.hexDetails.Name = "hexDetails";
             this.hexDetails.ReadOnly = true;
-            this.hexDetails.Size = new System.Drawing.Size(440, 159);
+            this.hexDetails.Size = new System.Drawing.Size(446, 159);
             this.hexDetails.TabIndex = 3;
             this.hexDetails.Text = "";
+            this.hexDetails.SelectionChanged += new System.EventHandler(this.hexDetails_SelectionChanged);
             this.hexDetails.TextChanged += new System.EventHandler(this.richTextBox1_TextChanged);
             // 
             // asciiDetails
             // 
-            this.asciiDetails.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.asciiDetails.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.asciiDetails.HideSelection = false;
             this.asciiDetails.Location = new System.Drawing.Point(446, 341);
             this.asciiDetails.Name = "asciiDetails";
             this.asciiDetails.ReadOnly = true;

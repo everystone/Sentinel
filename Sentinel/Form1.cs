@@ -7,6 +7,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -129,18 +130,18 @@ namespace Sentinel {
                 //MessageBox.Show(selectedPacket.SubItems[0].Text);
                 var no = Int32.Parse(selectedPacket.SubItems[0].Text); // packet #
                 var packet = packets[no];
-                var hexString = packet.Ethernet.Payload.ToHexadecimalString();               
-                hexDetails.Text = hexString;
+                var hexString = packet.Ethernet.Payload.ToHexadecimalString();
+
                 //String ascii = String.Empty;
 
-               // for (int i = 0; i < hexString.Length; i += 2) {
-                //    string hs = hexString.Substring(i, 2);
-                //    ascii += (Convert.ToChar(Convert.ToUInt32(hs, 16)));
-                //}
+              
                // ascii += '\0';
                 //Console.WriteLine("Ascii: " + ascii);
                 //asciiDetails.Rtf = @"{\rtf1\utf-8" + ascii + "}";
-                var ascii = StringUtil.ConvertHexToString(hexString, Encoding.UTF8);
+                //var ascii = StringUtil.ConvertHexToString(hexString, Encoding.ASCII);
+                var ascii = hexToStr(hexString);
+                //hexDetails.Text = Regex.Replace(hexString, ".{2}", "$0 ");
+                hexDetails.Text = hexString;
                 ascii = StringUtil.RemoveSpecialCharacters(ascii);
                 asciiDetails.Text = ascii;
                 Console.WriteLine(ascii);
@@ -148,6 +149,14 @@ namespace Sentinel {
             }
 
 
+        }
+        private String hexToStr(String hexString) {
+            String result = String.Empty;
+             for (int i = 0; i < hexString.Length; i += 2) {
+                string hs = hexString.Substring(i, 2);
+                result += (Convert.ToChar(Convert.ToUInt32(hs, 16)));
+            }
+             return result;
         }
 
 
@@ -165,6 +174,17 @@ namespace Sentinel {
 
             toolTip.SetToolTip(filterBox, "Set a filter using WinPcap expression syntax\nexamples:\nsrc host 10.0.0.1\ndst port 27000");
             toolTip.SetToolTip(gui_packetNumberBox, "Number of packets to capture");
+        }
+
+        private void hexDetails_SelectionChanged(object sender, EventArgs e) {
+            if (hexDetails.SelectedText.Length > 0) {
+                //Console.WriteLine(hexDetails.SelectedText);
+                // Find index of selected text
+                var start = hexDetails.Text.IndexOf(hexDetails.SelectedText);
+                asciiDetails.Select(start / 2, hexDetails.SelectedText.Length / 2);
+                Console.WriteLine(String.Format("Selecting from {0} -> {1}", start/2, hexDetails.SelectedText.Length/2));
+            }
+            //MessageBox.Show(hexDetails.SelectedText);
         }
     }
 }

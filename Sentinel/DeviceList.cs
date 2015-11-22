@@ -31,7 +31,7 @@ namespace Sentinel {
             devices.Clear();
             for (int i = 0; i != allDevices.Count; i++) {
                 LivePacketDevice device = allDevices[i];
-                devices.Add(device.Addresses[1].Address.ToString(), device);
+                devices.Add(device.Name, device);
 
                 Console.WriteLine(i + ". " + device.Name);
 
