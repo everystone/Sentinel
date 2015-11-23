@@ -7,3 +7,17 @@ Settings:
 	- Filters
 	- Discard all but tcp,udp
 	- Discard packets with zero data (syn, ack, etc)
+
+Method to stop listening
+Auto-parse data
+functionality: Select 4 bytes, float value is correct, click float value, a third textbox should contain all the "right" values.
+
+When finished, and all packets are analysed: option to generate code to read packet.
+Or at least a "recipy", like:
+
+4 bytes int32
+2 bytes int16
+1 byte boolean
+4 bytes float
+4 bytes float
+total: 15 bytes

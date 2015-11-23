@@ -31,12 +31,18 @@
             this.gui_btn_start = new System.Windows.Forms.Button();
             this.gui_ComboAdapter = new System.Windows.Forms.ComboBox();
             this.hexDetails = new System.Windows.Forms.RichTextBox();
-            this.asciiDetails = new System.Windows.Forms.RichTextBox();
             this.hexContextStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.decodeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.colorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.yellowToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.blueToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.blueToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.greenToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.asciiDetails = new System.Windows.Forms.RichTextBox();
             this.panel2 = new System.Windows.Forms.Panel();
             this.gui_bytes_selected = new System.Windows.Forms.Label();
             this.gui_label_calc = new System.Windows.Forms.Label();
+            this.orangeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.packetListView = new ListViewNF();
             this.noHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.dateHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -125,6 +131,61 @@
             this.hexDetails.SelectionChanged += new System.EventHandler(this.hexDetails_SelectionChanged);
             this.hexDetails.TextChanged += new System.EventHandler(this.richTextBox1_TextChanged);
             // 
+            // hexContextStrip
+            // 
+            this.hexContextStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.decodeToolStripMenuItem,
+            this.colorToolStripMenuItem});
+            this.hexContextStrip.Name = "hexContextStrip";
+            this.hexContextStrip.Size = new System.Drawing.Size(155, 70);
+            // 
+            // decodeToolStripMenuItem
+            // 
+            this.decodeToolStripMenuItem.Name = "decodeToolStripMenuItem";
+            this.decodeToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
+            this.decodeToolStripMenuItem.Text = "Decode";
+            this.decodeToolStripMenuItem.Click += new System.EventHandler(this.decodeToolStripMenuItem_Click);
+            // 
+            // colorToolStripMenuItem
+            // 
+            this.colorToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.yellowToolStripMenuItem,
+            this.blueToolStripMenuItem,
+            this.blueToolStripMenuItem1,
+            this.greenToolStripMenuItem,
+            this.orangeToolStripMenuItem});
+            this.colorToolStripMenuItem.Name = "colorToolStripMenuItem";
+            this.colorToolStripMenuItem.Size = new System.Drawing.Size(154, 22);
+            this.colorToolStripMenuItem.Text = "Color Selection";
+            // 
+            // yellowToolStripMenuItem
+            // 
+            this.yellowToolStripMenuItem.Name = "yellowToolStripMenuItem";
+            this.yellowToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.yellowToolStripMenuItem.Text = "Yellow";
+            this.yellowToolStripMenuItem.Click += new System.EventHandler(this.yellowToolStripMenuItem_Click);
+            // 
+            // blueToolStripMenuItem
+            // 
+            this.blueToolStripMenuItem.Name = "blueToolStripMenuItem";
+            this.blueToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.blueToolStripMenuItem.Text = "Red";
+            this.blueToolStripMenuItem.Click += new System.EventHandler(this.redToolStripMenuItem_Click);
+            // 
+            // blueToolStripMenuItem1
+            // 
+            this.blueToolStripMenuItem1.Name = "blueToolStripMenuItem1";
+            this.blueToolStripMenuItem1.Size = new System.Drawing.Size(152, 22);
+            this.blueToolStripMenuItem1.Text = "Blue";
+            this.blueToolStripMenuItem1.Click += new System.EventHandler(this.blueToolStripMenuItem_Click);
+            // 
+            // greenToolStripMenuItem
+            // 
+            this.greenToolStripMenuItem.Name = "greenToolStripMenuItem";
+            this.greenToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.greenToolStripMenuItem.Text = "Green";
+            this.greenToolStripMenuItem.Click += new System.EventHandler(this.greenToolStripMenuItem_Click);
+            // 
             // asciiDetails
             // 
             this.asciiDetails.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
@@ -137,20 +198,6 @@
             this.asciiDetails.Size = new System.Drawing.Size(439, 159);
             this.asciiDetails.TabIndex = 4;
             this.asciiDetails.Text = "";
-            // 
-            // hexContextStrip
-            // 
-            this.hexContextStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.decodeToolStripMenuItem});
-            this.hexContextStrip.Name = "hexContextStrip";
-            this.hexContextStrip.Size = new System.Drawing.Size(115, 26);
-            // 
-            // decodeToolStripMenuItem
-            // 
-            this.decodeToolStripMenuItem.Name = "decodeToolStripMenuItem";
-            this.decodeToolStripMenuItem.Size = new System.Drawing.Size(114, 22);
-            this.decodeToolStripMenuItem.Text = "Decode";
-            this.decodeToolStripMenuItem.Click += new System.EventHandler(this.decodeToolStripMenuItem_Click);
             // 
             // panel2
             // 
@@ -186,6 +233,13 @@
             this.gui_label_calc.Size = new System.Drawing.Size(149, 17);
             this.gui_label_calc.TabIndex = 9;
             this.gui_label_calc.Text = "Select text in hexview..";
+            // 
+            // orangeToolStripMenuItem
+            // 
+            this.orangeToolStripMenuItem.Name = "orangeToolStripMenuItem";
+            this.orangeToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.orangeToolStripMenuItem.Text = "Orange";
+            this.orangeToolStripMenuItem.Click += new System.EventHandler(this.orangeToolStripMenuItem_Click);
             // 
             // packetListView
             // 
@@ -286,6 +340,12 @@
         private System.Windows.Forms.ColumnHeader protoHeader;
         private System.Windows.Forms.ColumnHeader sizeHeader;
         private System.Windows.Forms.ColumnHeader payloadHeader;
+        private System.Windows.Forms.ToolStripMenuItem colorToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem yellowToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem blueToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem blueToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem greenToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem orangeToolStripMenuItem;
 
     }
 }

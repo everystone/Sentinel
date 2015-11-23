@@ -194,15 +194,29 @@ namespace Sentinel {
             toolTip.SetToolTip(gui_packetNumberBox, "Number of packets to capture");
         }
 
+        /* Selects text in Ascii box that represents HEX values */
+        private void selectText(String color = null) {
+            var start = hexDetails.Text.IndexOf(hexDetails.SelectedText);
+            asciiDetails.Select(start / 2, hexDetails.SelectedText.Length / 2);
+            if(color != null){
+                hexDetails.SelectionBackColor = Color.FromName(color);
+                asciiDetails.SelectionBackColor = Color.FromName(color);
+                deSelect();
+            }
+            Console.WriteLine(String.Format("Selecting from {0} -> {1}", start / 2, hexDetails.SelectedText.Length / 2));
+
+        }
+        /* Deselects selection in hex and ascii */
+        private void deSelect() {
+            hexDetails.DeselectAll();
+            asciiDetails.DeselectAll();
+        }
         private void hexDetails_SelectionChanged(object sender, EventArgs e) {
             if (hexDetails.SelectedText.Length > 0) {
                 //Console.WriteLine(hexDetails.SelectedText);
                 // Find index of selected text
                 gui_bytes_selected.Text = (Regex.Replace(hexDetails.SelectedText, @"\s+", "").Length / 2).ToString() + " Bytes selected";
-
-                var start = hexDetails.Text.IndexOf(hexDetails.SelectedText);
-                asciiDetails.Select(start / 2, hexDetails.SelectedText.Length / 2);
-                Console.WriteLine(String.Format("Selecting from {0} -> {1}", start/2, hexDetails.SelectedText.Length/2));
+                selectText();
             }
             //MessageBox.Show(hexDetails.SelectedText);
         }
@@ -224,7 +238,7 @@ namespace Sentinel {
                     case 2: // in16, uint16
                         var int16 = BitConverter.ToInt16(bytes, 0);
                         var uint16 = BitConverter.ToUInt16(bytes, 0);
-                        result = String.Format("int16: {0}, UInt316 {1}", int16, uint16);
+                        result = String.Format("int16: {0}, UInt16: {1}", int16, uint16);
                         break;
                     case 4: // uint32, int32
 
@@ -247,6 +261,26 @@ namespace Sentinel {
             }
 
             gui_label_calc.Text = result;
+        }
+
+        private void yellowToolStripMenuItem_Click(object sender, EventArgs e) {
+            selectText("yellow");            
+        }
+
+        private void blueToolStripMenuItem_Click(object sender, EventArgs e) {
+            selectText("blue");
+        }
+
+        private void redToolStripMenuItem_Click(object sender, EventArgs e) {
+            selectText("red");
+        }
+
+        private void greenToolStripMenuItem_Click(object sender, EventArgs e) {
+            selectText("green");
+        }
+
+        private void orangeToolStripMenuItem_Click(object sender, EventArgs e) {
+            selectText("orange");
         }
     }
 }
