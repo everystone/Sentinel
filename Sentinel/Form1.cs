@@ -221,46 +221,42 @@ namespace Sentinel {
             //MessageBox.Show(hexDetails.SelectedText);
         }
 
-        private void decodeToolStripMenuItem_Click(object sender, EventArgs e) {
+        private void decodeSelection() {
             // Grab Hex selection and remove all spaces
             var hex = Regex.Replace(hexDetails.SelectedText, @"\s+", "");
             var byteCount = hex.Length / 2;
             byte[] bytes = StringUtil.StringToByteArray(hex);
             Console.WriteLine("Bytes: " + bytes);
             var result = "";
-            try {
+
                 switch (byteCount) {
                     case 0:
                     case 1:
-                        var boolean = BitConverter.ToBoolean(bytes, 0);
-                        result = String.Format("Bool: {0}", boolean);
+                        result += PacketUtils.isObjectOfType(bytes, PacketUtils.ValueType.Boolean);
                         break;
                     case 2: // in16, uint16
-                        var int16 = BitConverter.ToInt16(bytes, 0);
-                        var uint16 = BitConverter.ToUInt16(bytes, 0);
-                        result = String.Format("int16: {0}, UInt16: {1}", int16, uint16);
+                        result += PacketUtils.isObjectOfType(bytes, PacketUtils.ValueType.Int16);
+                        result += PacketUtils.isObjectOfType(bytes, PacketUtils.ValueType.UInt16);
                         break;
-                    case 4: // uint32, int32
-
-                        var int32 = BitConverter.ToInt32(bytes, 0);
-                        var uint32 = BitConverter.ToUInt32(bytes, 0);
-                        var f = BitConverter.ToSingle(bytes, 0);
-                        result = String.Format("Int32: {0}, UInt32: {1}, Float: {2}", int32, uint32, f);
+                    case 4: // uint32, int32, float
+                        result += PacketUtils.isObjectOfType(bytes, PacketUtils.ValueType.Int32);
+                        result += PacketUtils.isObjectOfType(bytes, PacketUtils.ValueType.UInt32);
+                        result += PacketUtils.isObjectOfType(bytes, PacketUtils.ValueType.Float);
                         break;
                     case 6:
-                        
+
                         break;
-                    case 8:
-                        
-                        var d = BitConverter.ToDouble(bytes, 0);
-                        result = String.Format("Double: {0}", d);
+                    case 8: // double
+                        result += PacketUtils.isObjectOfType(bytes, PacketUtils.ValueType.Double);
                         break;
                 }
-            }catch(Exception ex){
-                // Exception when converting from bytes..
-            }
+            
+
 
             gui_label_calc.Text = result;
+        }
+        private void decodeToolStripMenuItem_Click(object sender, EventArgs e) {
+            decodeSelection();
         }
 
         private void yellowToolStripMenuItem_Click(object sender, EventArgs e) {
