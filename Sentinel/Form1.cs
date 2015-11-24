@@ -216,12 +216,17 @@ namespace Sentinel {
                 //Console.WriteLine(hexDetails.SelectedText);
                 // Find index of selected text
                 gui_bytes_selected.Text = (Regex.Replace(hexDetails.SelectedText, @"\s+", "").Length / 2).ToString() + " Bytes selected";
+                decodeSelection(); // CONFIG THIS ( Auto-decode on selection )
                 selectText();
+                
             }
             //MessageBox.Show(hexDetails.SelectedText);
         }
 
         private void decodeSelection() {
+            if (hexDetails.SelectedText.Length < 2) // 1 byte is represented by 2 characters
+                return;
+
             // Grab Hex selection and remove all spaces
             var hex = Regex.Replace(hexDetails.SelectedText, @"\s+", "");
             var byteCount = hex.Length / 2;
